@@ -20,11 +20,11 @@ logger = logging.getLogger(__name__)
 load_dotenv("../.env")
 TOKEN = os.getenv("token")
 
-def start(update, context):
+def start(update: Update, context: CallbackContext) -> None:
     """Send a message when command /start is issued"""
     update.message.reply_text("Thanks for using my bot!")
 
-def add(update, context):
+def add(update: Update, context: CallbackContext) -> None:
     """Sum all numbers input together"""
     temp = update.message.text.split(" ")
 
@@ -46,7 +46,7 @@ def add(update, context):
 
     update.message.reply_text("The sum of all the numbers provided is {}".format(sum(numbers)))
 
-def minus(update, context):
+def minus(update: Update, context: CallbackContext) -> None:
     """Subtract all numbers away from the first number provded"""
     temp = update.message.text.split(" ")
 
@@ -71,7 +71,7 @@ def minus(update, context):
 
     update.message.reply_text("The result of the difference of all the numbers provided is {}".format(big_number - sum(numbers)))
 
-def multiply(update, context):
+def multiply(update: Update, context: CallbackContext) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) < 3:
@@ -96,7 +96,7 @@ def multiply(update, context):
 
     update.message.reply_text("The product of all the numbers provided is {}".format(result))
 
-def divide(update, context):
+def divide(update: Update, context: CallbackContext) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) != 3:
@@ -118,6 +118,10 @@ def divide(update, context):
     result = numbers[0] / numbers[1]
 
     update.message.reply_text("The quotient of the numbers provided is {}".format(result))
+
+def error(update: Update, context: CallbackContext) -> None:
+    """Log errors caused by updates"""
+    logger.warning("Update '%s' caused error '%s'", update, context.error)
 
 def main():
     updater = Updater(TOKEN)
