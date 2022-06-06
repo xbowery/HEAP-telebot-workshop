@@ -31,12 +31,12 @@ async def start(update:Update, context:CallbackContext.DEFAULT_TYPE) -> None:
     )
     await update.message.reply_text(msg)
 
-async def echo(update: Update, context: CallbackContext) -> None:
+async def echo(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Echoes the user message"""
     message = update.message.text
     await update.message.reply_text(message)
 
-async def error(update: Update, context: CallbackContext) -> None:
+async def error(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Log errors caused by updates"""
     logger.warning("Update '%s' caused error '%s'", update, context.error)
 
