@@ -8,8 +8,7 @@ from telegram.ext import (Application, CallbackContext, CommandHandler,
 
 # Enable logging
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -47,8 +46,7 @@ def main():
     application.add_handler(CommandHandler("start", start))
 
     # Add Message handlers
-    application.add_handler(MessageHandler(
-        filters.TEXT & ~filters.COMMAND, echo))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
     # Run the bot until user presses Ctrl-C
     application.run_polling()

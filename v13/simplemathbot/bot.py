@@ -6,8 +6,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, Updater
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -35,16 +34,12 @@ def add(update: Update, context: CallbackContext) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            update.message.reply_text(
-                "One of the numbers provided is invalid."
-            )
+            update.message.reply_text("One of the numbers provided is invalid.")
             return
 
         numbers.append(int(i))
 
-    update.message.reply_text(
-        f"The sum of all the numbers provided is {sum(numbers)}"
-    )
+    update.message.reply_text(f"The sum of all the numbers provided is {sum(numbers)}")
 
 
 def minus(update: Update, context: CallbackContext) -> None:
@@ -62,9 +57,7 @@ def minus(update: Update, context: CallbackContext) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            update.message.reply_text(
-                "One of the numbers provided is invalid."
-            )
+            update.message.reply_text("One of the numbers provided is invalid.")
             return
 
         numbers.append(int(i))
@@ -94,9 +87,7 @@ def multiply(update: Update, context: CallbackContext) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            update.message.reply_text(
-                "One of the numbers provided is invalid."
-            )
+            update.message.reply_text("One of the numbers provided is invalid.")
             return
 
         numbers.append(int(i))
@@ -105,9 +96,7 @@ def multiply(update: Update, context: CallbackContext) -> None:
     for i in numbers:
         result *= i
 
-    update.message.reply_text(
-        f"The product of all the numbers provided is {result}"
-    )
+    update.message.reply_text(f"The product of all the numbers provided is {result}")
 
 
 def divide(update: Update, context: CallbackContext) -> None:
@@ -124,18 +113,14 @@ def divide(update: Update, context: CallbackContext) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            update.message.reply_text(
-                "One of the numbers provided is invalid."
-            )
+            update.message.reply_text("One of the numbers provided is invalid.")
             return
 
         numbers.append(int(i))
 
     result = numbers[0] / numbers[1]
 
-    update.message.reply_text(
-        f"The quotient of the numbers provided is {result}"
-    )
+    update.message.reply_text(f"The quotient of the numbers provided is {result}")
 
 
 def error(update: Update, context: CallbackContext) -> None:
