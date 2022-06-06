@@ -205,8 +205,11 @@ def main():
     """Runs the bot"""
     updater = Updater(TOKEN)
 
+    # Initialises the dispatcher
     dispatcher = updater.dispatcher
 
+    # Creates the Conversation Handler for the bot
+    # to chat with user input
     game_conv = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
@@ -223,10 +226,13 @@ def main():
         allow_reentry=True,
     )
 
+    # Add the Conversation Handler
     dispatcher.add_handler(game_conv)
 
+    # Start running the bot
     updater.start_polling()
 
+    # Run the bot until Ctrl-C is pressed
     updater.idle()
 
 
