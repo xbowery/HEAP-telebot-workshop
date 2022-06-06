@@ -22,7 +22,12 @@ TOKEN = os.getenv("token")
 
 def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued"""
-    update.message.reply_text("Hello! Thanks for using my bot! Hope you have a good day ahead.")
+
+    msg = (
+        "Hello! Thanks for using my bot! This bot echoes whatever"
+        " messages that you send to it. Hope you have a good day ahead!"
+    )
+    update.message.reply_text(msg)
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Echoes the user message"""
