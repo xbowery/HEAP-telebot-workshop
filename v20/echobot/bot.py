@@ -1,16 +1,10 @@
-import os
 import logging
-import telegram
-from dotenv import load_dotenv
+import os
 
+from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import (
-    Application,
-    CallbackContext,
-    CommandHandler,
-    MessageHandler,
-    filters,
-)
+from telegram.ext import (Application, CallbackContext, CommandHandler,
+                          MessageHandler, filters)
 
 # Enable logging
 logging.basicConfig(
@@ -22,7 +16,8 @@ logger = logging.getLogger(__name__)
 load_dotenv("../.env")
 TOKEN = os.getenv("token")
 
-async def start(update:Update, context:CallbackContext.DEFAULT_TYPE) -> None:
+
+async def start(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued"""
 
     msg = (
@@ -31,14 +26,17 @@ async def start(update:Update, context:CallbackContext.DEFAULT_TYPE) -> None:
     )
     await update.message.reply_text(msg)
 
+
 async def echo(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Echoes the user message"""
     message = update.message.text
     await update.message.reply_text(message)
 
+
 async def error(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Log errors caused by updates"""
     logger.warning("Update '%s' caused error '%s'", update, context.error)
+
 
 def main():
     """Run the bot."""
@@ -49,10 +47,13 @@ def main():
     application.add_handler(CommandHandler("start", start))
 
     # Add Message handlers
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+    application.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, echo)
+    )
 
     # Run the bot until user presses Ctrl-C
     application.run_polling()
+
 
 if __name__ == "__main__":
     main()

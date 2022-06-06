@@ -1,28 +1,24 @@
-import os
 import logging
-import telegram
-from dotenv import load_dotenv
+import os
 
+from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import (
-    Application,
-    CallbackContext,
-    CommandHandler,
-    MessageHandler,
-    filters,
-)
+from telegram.ext import Application, CallbackContext, CommandHandler
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
 load_dotenv("../.env")
 TOKEN = os.getenv("token")
 
+
 async def start(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Send a message when command /start is issued"""
     await update.message.reply_text("Thanks for using my bot!")
+
 
 async def add(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Sum all numbers input together"""
@@ -39,12 +35,17 @@ async def add(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
 
-    await update.message.reply_text("The sum of all the numbers provided is {}".format(sum(numbers)))
+    await update.message.reply_text(
+        f"The sum of all the numbers provided is {sum(numbers)}"
+    )
+
 
 async def minus(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Subtract all numbers away from the first number provded"""
@@ -61,7 +62,9 @@ async def minus(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
@@ -69,9 +72,17 @@ async def minus(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     big_number = numbers[0]
     numbers = numbers[1:]
 
-    await update.message.reply_text("The result of the difference of all the numbers provided is {}".format(big_number - sum(numbers)))
+    reply_msg = (
+        "The result of the difference of all the numbers provided is "
+        f"{big_number - sum(numbers)}"
+    )
 
-async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(reply_msg)
+
+
+async def multiply(
+    update: Update, context: CallbackContext.DEFAULT_TYPE
+) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) < 3:
@@ -85,7 +96,9 @@ async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> Non
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
@@ -94,9 +107,14 @@ async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> Non
     for i in numbers:
         result *= i
 
-    await update.message.reply_text("The product of all the numbers provided is {}".format(result))
+    await update.message.reply_text(
+        f"The product of all the numbers provided is {result}"
+    )
 
-async def divide(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+
+async def divide(
+    update: Update, context: CallbackContext.DEFAULT_TYPE
+) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) != 3:
@@ -110,18 +128,24 @@ async def divide(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
 
     result = numbers[0] / numbers[1]
 
-    await update.message.reply_text("The quotient of the numbers provided is {}".format(result))
+    await update.message.reply_text(
+        f"The quotient of the numbers provided is {result}"
+    )
+
 
 async def error(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     """Log errors caused by updates"""
     logger.warning("Update '%s' caused error '%s'", update, context.error)
+
 
 def main():
     """Run the bot."""
@@ -137,6 +161,7 @@ def main():
 
     # Run the bot until user presses Ctrl-C
     application.run_polling()
+
 
 if __name__ == "__main__":
     main()
