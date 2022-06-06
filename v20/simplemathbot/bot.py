@@ -6,7 +6,8 @@ from telegram import Update
 from telegram.ext import Application, CallbackContext, CommandHandler
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,9 @@ async def add(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
@@ -59,7 +62,9 @@ async def minus(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
@@ -75,7 +80,9 @@ async def minus(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     await update.message.reply_text(reply_msg)
 
 
-async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+async def multiply(
+    update: Update, context: CallbackContext.DEFAULT_TYPE
+) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) < 3:
@@ -89,7 +96,9 @@ async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> Non
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
@@ -103,7 +112,9 @@ async def multiply(update: Update, context: CallbackContext.DEFAULT_TYPE) -> Non
     )
 
 
-async def divide(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+async def divide(
+    update: Update, context: CallbackContext.DEFAULT_TYPE
+) -> None:
     temp = update.message.text.split(" ")
 
     if len(temp) != 3:
@@ -117,14 +128,18 @@ async def divide(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     # Checking for invalid args:
     for i in args:
         if not i.isnumeric():
-            await update.message.reply_text("One of the numbers provided is invalid.")
+            await update.message.reply_text(
+                "One of the numbers provided is invalid."
+            )
             return
 
         numbers.append(int(i))
 
     result = numbers[0] / numbers[1]
 
-    await update.message.reply_text(f"The quotient of the numbers provided is {result}")
+    await update.message.reply_text(
+        f"The quotient of the numbers provided is {result}"
+    )
 
 
 async def error(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:

@@ -8,7 +8,8 @@ from telegram.ext import (CallbackContext, CommandHandler, ConversationHandler,
                           Filters, MessageHandler, Updater)
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,10 @@ def start(update: Update, context: CallbackContext) -> None:
     """Sends a message with inline buttons attached to play the game."""
     chat_id = update.message.chat.id
 
-    msg = "Hello! Thanks for using me! " "Let's play a game of Scissors, Paper, Stone!"
+    msg = (
+        "Hello! Thanks for using me! "
+        "Let's play a game of Scissors, Paper, Stone!"
+    )
 
     update.message.reply_text(msg)
 
@@ -206,7 +210,10 @@ def main():
     game_conv = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
-            1: [CommandHandler("end", end), MessageHandler(Filters.text, game_message)],
+            1: [
+                CommandHandler("end", end),
+                MessageHandler(Filters.text, game_message)
+            ],
             2: [
                 CommandHandler("end", end),
                 MessageHandler(Filters.text, option_message),
