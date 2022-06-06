@@ -69,7 +69,7 @@ def minus(update, context):
     big_number = numbers[0]
     numbers = numbers[1:]
 
-    update.message.reply_text("The sum of all the numbers provided is {}".format(big_number - sum(numbers)))
+    update.message.reply_text("The result of the difference of all the numbers provided is {}".format(big_number - sum(numbers)))
 
 def multiply(update, context):
     temp = update.message.text.split(" ")
@@ -94,7 +94,7 @@ def multiply(update, context):
     for i in numbers:
         result *= i
 
-    update.message.reply_text("The sum of all the numbers provided is {}".format(result))
+    update.message.reply_text("The product of all the numbers provided is {}".format(result))
 
 def divide(update, context):
     temp = update.message.text.split(" ")
@@ -117,7 +117,7 @@ def divide(update, context):
 
     result = numbers[0] / numbers[1]
 
-    update.message.reply_text("The sum of all the numbers provided is {}".format(result))
+    update.message.reply_text("The quotient of the numbers provided is {}".format(result))
 
 def main():
     updater = Updater(TOKEN)
