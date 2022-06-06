@@ -1,6 +1,5 @@
 import os
 import logging
-import signal
 import telegram
 from dotenv import load_dotenv
 
