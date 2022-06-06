@@ -1,24 +1,20 @@
-import os
 import logging
-import telegram
-from dotenv import load_dotenv
+import os
 
+from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import (
-    Updater, 
-    CommandHandler, 
-    MessageHandler,
-    Filters,
-    CallbackContext,
-)
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, Updater)
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
 load_dotenv("../.env")
 TOKEN = os.getenv("token")
+
 
 def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued"""
@@ -29,14 +25,17 @@ def start(update: Update, context: CallbackContext) -> None:
     )
     update.message.reply_text(msg)
 
+
 def echo(update: Update, context: CallbackContext) -> None:
     """Echoes the user message"""
     message = update.message.text
     update.message.reply_text(message)
 
+
 def error(update: Update, context: CallbackContext) -> None:
     """Log errors caused by updates"""
     logger.warning("Update '%s' caused error '%s'", update, context.error)
+
 
 def main():
     # Create the Updater -> Need to pass in bot's token here to init bot
@@ -59,6 +58,7 @@ def main():
 
     # Run the bot until Ctrl-C is pressed
     updater.idle()
+
 
 if __name__ == "__main__":
     main()
