@@ -124,7 +124,7 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("start", start))
 
     # Add handlers
-    dispatcher.add_handler(pokemon_choice)
+    dispatcher.add_handler(CommandHandler("pokemon", pokemon_choice))
     dispatcher.add_handler(ShippingQueryHandler(shipping_callback))
     dispatcher.add_handler(PreCheckoutQueryHandler(precheckout_callback))
     dispatcher.add_handler(MessageHandler(Filters.successful_payment,
