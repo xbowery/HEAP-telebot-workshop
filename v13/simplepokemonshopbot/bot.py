@@ -23,8 +23,8 @@ def start(update: Update, context: CallbackContext) -> None:
     """Prints the welcome screen when the /start command is issued"""
     msg = (
         "Welcome to the Pokemon Store (Telegram version)!\n\n"
-        "Please purchase our Pokemon by pressing"
-        " /pokemon."
+        "Please purchase our Pokemon by pressing the"
+        " /pokemon command."
     )
 
     update.message.reply_text(msg)
@@ -46,13 +46,16 @@ def pokemon_choice(update: Update, context: CallbackContext) -> None:
     prices = [LabeledPrice("Base Price", price * 100)]
 
     context.bot.send_invoice(
-        chat_id=chat_id,
-        title=title,
-        description=description,
-        payload=payload,
-        provider_token=PAYMENT_PROVIDER_TOKEN,
-        currency=currency,
-        prices=prices,
+        chat_id,
+        title,
+        description,
+        payload,
+        PAYMENT_PROVIDER_TOKEN,
+        currency,
+        prices,
+        photo_url="https://i.imgur.com/0Zogxhb.png",
+        photo_width=512,
+        photo_height=512,
         need_name=True,
         need_phone_number=True,
         need_email=True,
@@ -76,7 +79,7 @@ def shipping_callback(update: Update, context: CallbackContext) -> None:
     # Second option has an array of LabeledPrice objects
     price_list = [LabeledPrice('Normal Charges', 300),
                   LabeledPrice('Express Charges', 450)]
-    options.append(ShippingOption('2', 'Express Delivery - 1 Day'), price_list)
+    options.append(ShippingOption('2', 'Express Delivery - 1 Day', price_list))
     query.answer(ok=True, shipping_options=options)
 
 
@@ -98,10 +101,12 @@ def successful_payment_callback(
 ) -> None:
     """Confirms the successful payment"""
     # Do something after successfully receiving payment
+    date = datetime.now() + timedelta(days=1)
+    date = str(date).split(" ")[0]
     msg = (
         "Thank you for your payment!\n\n"
         "You should receive your Pokemon on "
-        f"{datetime.now() + timedelta(days=1)}!"
+        f"{date}!"
     )
 
     update.message.reply_text(msg)
@@ -128,7 +133,7 @@ def main() -> None:
     dispatcher.add_handler(ShippingQueryHandler(shipping_callback))
     dispatcher.add_handler(PreCheckoutQueryHandler(precheckout_callback))
     dispatcher.add_handler(MessageHandler(Filters.successful_payment,
-                                          successful_payment_callback))
+                                successful_payment_callback))
 
     # Add error handler
     dispatcher.add_error_handler(error)
