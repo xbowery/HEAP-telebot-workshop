@@ -3,10 +3,9 @@ import os
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
-from telegram import (LabeledPrice, ReplyKeyboardMarkup, ReplyKeyboardRemove,
-                      ShippingOption, Update)
-from telegram.ext import (CallbackContext, CommandHandler, ConversationHandler,
-                          Filters, MessageHandler, PreCheckoutQueryHandler,
+from telegram import LabeledPrice, ShippingOption, Update
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, PreCheckoutQueryHandler,
                           ShippingQueryHandler, Updater)
 
 logging.basicConfig(
@@ -19,95 +18,47 @@ load_dotenv("../.env")
 TOKEN = os.getenv("token")
 PAYMENT_PROVIDER_TOKEN = os.getenv("payment_token")
 
-shop_keyboard = [
-    ['Bulbasaur'],
-    ['Charmander'],
-    ['Squirtle']
-]
-
-shop_markup = ReplyKeyboardMarkup(shop_keyboard, one_time_keyboard=True)
-
 
 def start(update: Update, context: CallbackContext) -> None:
     """Prints the welcome screen when the /start command is issued"""
     msg = (
         "Welcome to the Pokemon Store (Telegram version)!\n\n"
-        "Please take a look at our Pokemons available by pressing the"
-        " /shop command."
+        "Please purchase our Pokemon by pressing the"
+        " /pokemon command."
     )
 
     update.message.reply_text(msg)
 
 
-def shop(update: Update, context: CallbackContext) -> None:
-    """Displays the items available in the shop"""
-    chat_id = update.message.chat.id
-
-    msg = (
-        "Which Pokemon would you like to purchase?"
-    )
-
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=msg,
-        reply_markup=shop_markup
-    )
-
-    return 1
-
-
-def message_choice(update: Update, context: CallbackContext) -> None:
+def pokemon_choice(update: Update, context: CallbackContext) -> None:
     """Detects the message to determine the user's choice"""
     chat_id = update.message.chat.id
 
-    text = update.message.text
+    title = "Payment for Pikachu"
+    description = "Purchase your very own Pikachu now!"
+    # Select a payload just for you to recognize its the
+    # donation from your bot
+    payload = "Custom-Payload"
+    currency = "USD"
+    # Price in dollars
+    price = 10
+    # price * 100 so as to include 2 decimal points
+    prices = [LabeledPrice("Base Price", price * 100)]
 
-    if text == "Bulbasaur" or text == "Charmander" or text == "Squirtle":
-        title = f"Payment for {text}"
-        description = "Purchase your very own Pokemon - {text}!"
-        # Select a payload just for you to recognize its the
-        # donation from your bot
-        payload = "Custom-Payload"
-        currency = "USD"
-        # Price in dollars
-        price = 10
-        # price * 100 so as to include 2 decimal points
-        prices = [LabeledPrice("Test", price * 100)]
-
-        context.bot.send_invoice(
-            chat_id,
-            title,
-            description,
-            payload,
-            PAYMENT_PROVIDER_TOKEN,
-            currency,
-            prices,
-            need_name=True,
-            need_phone_number=True,
-            need_email=True,
-            need_shipping_address=True,
-            is_flexible=True,
-        )
-
-        return 2
-
-    else:
-        context.bot.send_message(
-            chat_id,
-            text="Sorry, I don't understand your message: {text}"
-        )
-
-        msg = (
-            "Which Pokemon would you like to purchase?"
-        )
-
-        context.bot.send_message(
-            chat_id=chat_id,
-            text=msg,
-            reply_markup=shop_markup
-        )
-
-        return 1
+    context.bot.send_invoice(
+        chat_id=chat_id,
+        title=title,
+        description=description,
+        payload=payload,
+        provider_token=PAYMENT_PROVIDER_TOKEN,
+        currency=currency,
+        prices=prices,
+        need_name=True,
+        need_phone_number=True,
+        need_email=True,
+        need_shipping_address=True,
+        is_flexible=True,
+    )
 
 
 def shipping_callback(update: Update, context: CallbackContext) -> None:
@@ -117,7 +68,7 @@ def shipping_callback(update: Update, context: CallbackContext) -> None:
     if query.invoice_payload != "Custom-Payload":
         # Answer False ShippingQuery
         query.answer(ok=False, error_message="Something went wrong...")
-        return ConversationHandler.END
+        return
 
     # First option has a single LabeledPrice
     options = [ShippingOption('1', 'Normal Delivery - 5 Days',
@@ -125,7 +76,7 @@ def shipping_callback(update: Update, context: CallbackContext) -> None:
     # Second option has an array of LabeledPrice objects
     price_list = [LabeledPrice('Normal Charges', 300),
                   LabeledPrice('Express Charges', 450)]
-    options.append(ShippingOption('Express Delivery - 1 Day'), price_list)
+    options.append(ShippingOption('2', 'Express Delivery - 1 Day'), price_list)
     query.answer(ok=True, shipping_options=options)
 
 
@@ -137,7 +88,7 @@ def precheckout_callback(update: Update, context: CallbackContext) -> None:
     if query.invoice_payload != "Custom-Payload":
         # Answer False pre_checkout_query
         query.answer(ok=False, error_message="Something went wrong...")
-        return ConversationHandler.END
+        return
     else:
         query.answer(ok=True)
 
@@ -156,28 +107,6 @@ def successful_payment_callback(
     update.message.reply_text(msg)
 
 
-def cancel(update: Update, context: CallbackContext):
-    msg = "Request Cancelled. Press /shop to buy another Pokemon again!"
-
-    update.message.reply_text(msg)
-    return ConversationHandler.END
-
-
-def end(update: Update, context: CallbackContext):
-    chat_id = update.message.chat.id
-
-    end_msg = (
-        "Thank you for using this bot!\n\n"
-        "Use the /shop command again if you would like to purchase a Pokemon!"
-        "\n\nHave a great day ahead! :)"
-    )
-
-    context.bot.send_message(
-        chat_id=chat_id, text=end_msg, reply_markup=ReplyKeyboardRemove()
-    )
-    return ConversationHandler.END
-
-
 def error(update: Update, context: CallbackContext) -> None:
     """Log errors caused by updates"""
     logger.warning("Update '%s' caused error '%s'", update, context.error)
@@ -194,29 +123,12 @@ def main() -> None:
     # Add start handler
     dispatcher.add_handler(CommandHandler("start", start))
 
-    # Creates the Conversation Handler for the bot
-    # to chat with user input
-    shop_conv = ConversationHandler(
-        entry_points=[CommandHandler("shop", shop)],
-        states={
-            1: [
-                CommandHandler("end", end),
-                MessageHandler(Filters.text, message_choice)
-            ],
-            2: [
-                CommandHandler("end", end),
-                ShippingQueryHandler(shipping_callback),
-                PreCheckoutQueryHandler(precheckout_callback),
-                MessageHandler(Filters.successful_payment,
-                               successful_payment_callback)
-            ],
-        },
-        fallbacks=[CommandHandler("cancel", cancel)],
-        allow_reentry=True,
-    )
-
-    # Add conversation handler
-    dispatcher.add_handler(shop_conv)
+    # Add handlers
+    dispatcher.add_handler(pokemon_choice)
+    dispatcher.add_handler(ShippingQueryHandler(shipping_callback))
+    dispatcher.add_handler(PreCheckoutQueryHandler(precheckout_callback))
+    dispatcher.add_handler(MessageHandler(Filters.successful_payment,
+                                          successful_payment_callback))
 
     # Add error handler
     dispatcher.add_error_handler(error)
