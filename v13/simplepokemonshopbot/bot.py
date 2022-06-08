@@ -133,7 +133,7 @@ def main() -> None:
     dispatcher.add_handler(ShippingQueryHandler(shipping_callback))
     dispatcher.add_handler(PreCheckoutQueryHandler(precheckout_callback))
     dispatcher.add_handler(MessageHandler(Filters.successful_payment,
-                                successful_payment_callback))
+                                          successful_payment_callback))
 
     # Add error handler
     dispatcher.add_error_handler(error)
