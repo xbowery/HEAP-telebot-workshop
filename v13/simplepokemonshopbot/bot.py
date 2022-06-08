@@ -1,13 +1,13 @@
 import logging
 import os
-
 from datetime import datetime, timedelta
+
 from dotenv import load_dotenv
 from telegram import (LabeledPrice, ReplyKeyboardMarkup, ReplyKeyboardRemove,
-                          ShippingOption, Update)
+                      ShippingOption, Update)
 from telegram.ext import (CallbackContext, CommandHandler, ConversationHandler,
-                          PreCheckoutQueryHandler, ShippingQueryHandler,
-                          Filters, MessageHandler, Updater)
+                          Filters, MessageHandler, PreCheckoutQueryHandler,
+                          ShippingQueryHandler, Updater)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -42,7 +42,7 @@ def start(update: Update, context: CallbackContext) -> None:
 def shop(update: Update, context: CallbackContext) -> None:
     """Displays the items available in the shop"""
     chat_id = update.message.chat.id
-    
+
     msg = (
         "Which Pokemon would you like to purchase?"
     )
@@ -65,7 +65,7 @@ def message_choice(update: Update, context: CallbackContext) -> None:
     if text == "Bulbasaur" or text == "Charmander" or text == "Squirtle":
         title = f"Payment for {text}"
         description = "Purchase your very own Pokemon - {text}!"
-        # Select a payload just for you to recognize its the 
+        # Select a payload just for you to recognize its the
         # donation from your bot
         payload = "Custom-Payload"
         currency = "USD"
@@ -121,11 +121,11 @@ def shipping_callback(update: Update, context: CallbackContext) -> None:
 
     # First option has a single LabeledPrice
     options = [ShippingOption('1', 'Normal Delivery - 5 Days',
-     [LabeledPrice('Normal Charges', 300)])]
+                              [LabeledPrice('Normal Charges', 300)])]
     # Second option has an array of LabeledPrice objects
     price_list = [LabeledPrice('Normal Charges', 300),
-     LabeledPrice('Express Charges', 450)]
-    options.append(ShippingOption('Express Delivery - 1 Day'))
+                  LabeledPrice('Express Charges', 450)]
+    options.append(ShippingOption('Express Delivery - 1 Day'), price_list)
     query.answer(ok=True, shipping_options=options)
 
 
@@ -152,7 +152,7 @@ def successful_payment_callback(
         "You should receive your Pokemon on "
         f"{datetime.now() + timedelta(days=1)}!"
     )
-    
+
     update.message.reply_text(msg)
 
 
@@ -176,6 +176,11 @@ def end(update: Update, context: CallbackContext):
         chat_id=chat_id, text=end_msg, reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
+
+
+def error(update: Update, context: CallbackContext) -> None:
+    """Log errors caused by updates"""
+    logger.warning("Update '%s' caused error '%s'", update, context.error)
 
 
 def main() -> None:
@@ -202,12 +207,19 @@ def main() -> None:
                 CommandHandler("end", end),
                 ShippingQueryHandler(shipping_callback),
                 PreCheckoutQueryHandler(precheckout_callback),
-                MessageHandler(Filters.successful_payment, successful_payment_callback)
+                MessageHandler(Filters.successful_payment,
+                               successful_payment_callback)
             ],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
         allow_reentry=True,
     )
+
+    # Add conversation handler
+    dispatcher.add_handler(shop_conv)
+
+    # Add error handler
+    dispatcher.add_error_handler(error)
 
     # Start the bot
     updater.start_polling()
@@ -215,6 +227,6 @@ def main() -> None:
     # Run the bot until Ctrl-C is pressed
     updater.idle()
 
+
 if __name__ == "__main__":
     main()
-    
