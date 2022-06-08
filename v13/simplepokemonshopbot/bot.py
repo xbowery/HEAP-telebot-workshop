@@ -23,8 +23,8 @@ def start(update: Update, context: CallbackContext) -> None:
     """Prints the welcome screen when the /start command is issued"""
     msg = (
         "Welcome to the Pokemon Store (Telegram version)!\n\n"
-        "Please purchase our Pokemon by pressing the"
-        " /pokemon command."
+        "Please purchase our Pokemon by pressing"
+        " /pokemon."
     )
 
     update.message.reply_text(msg)
