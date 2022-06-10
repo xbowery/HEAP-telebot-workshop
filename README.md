@@ -24,3 +24,6 @@ This repository contains source code to complement the workshop conducted on 4 J
 ```python bot.py```
 
 Have fun learning from the repo and creating your own Telegram Bots!
+
+## Contributing
+Refer to [CONTRIBUTING.MD](https://github.com/xbowery/HEAP-telebot-workshop/blob/main/.github/CONTRIBUTING.md)
