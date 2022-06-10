@@ -1,0 +1,19 @@
+2022-06-06 23:32:28,270 - apscheduler.scheduler - INFO - Scheduler started
+2022-06-06 23:32:28,271 - telegram.ext._application - INFO - Application started
+2022-06-06 23:32:30,657 - __main__ - INFO - ID: 46730350 Username: Xbowery99 Name: King Yeh \U0001f476
+2022-06-06 23:32:42,402 - __main__ - INFO - ID: 46730350 Username: Xbowery99 Name: King Yeh \U0001f476
+2022-06-06 23:32:43,364 - __main__ - INFO - ID: 46730350 Username: Xbowery99 Name: King Yeh \U0001f476
+2022-06-07 00:17:50,814 - telegram.ext._application - INFO - Application is stopping. This might take a moment.
+2022-06-07 00:17:50,817 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2022-06-07 00:17:50,818 - telegram.ext._application - INFO - Application.stop() complete
+2022-06-07 00:17:54,590 - apscheduler.scheduler - INFO - Scheduler started
+2022-06-07 00:17:54,590 - telegram.ext._application - INFO - Application started
+2022-06-07 00:18:00,274 - __main__ - INFO - ID: 46730350 Username: Xbowery99 Name: King Yeh \U0001f476
+2022-06-07 00:18:04,912 - telegram.ext._application - INFO - Application is stopping. This might take a moment.
+2022-06-07 00:18:04,914 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2022-06-07 00:18:04,915 - telegram.ext._application - INFO - Application.stop() complete
+2022-06-07 00:18:13,288 - apscheduler.scheduler - INFO - Scheduler started
+2022-06-07 00:18:13,289 - telegram.ext._application - INFO - Application started
+2022-06-07 00:40:37,052 - telegram.ext._application - INFO - Application is stopping. This might take a moment.
+2022-06-07 00:40:37,054 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2022-06-07 00:40:37,055 - telegram.ext._application - INFO - Application.stop() complete
