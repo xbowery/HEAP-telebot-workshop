@@ -1,4 +1,4 @@
-# .Hack Enrichment Application Programme (HEAP) - Telegram Bot Workshop
+# .Hack Enrichment Application Programme (HEAP) - Telegram Bot Workshop 
 
 Author: [@xbowery](https://github.com/xbowery/)
 
